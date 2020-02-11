@@ -9,22 +9,43 @@
 import UIKit
 
 class ExistingCardsViewController: UIViewController {
+    
+    var cards = [String]()
+    
+   let existingCardsVC = ExistingCardsView()
 
+    override func loadView() {
+        view = existingCardsVC
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.existingCardsVC.collectionView.delegate = self
+        self.existingCardsVC.collectionView.dataSource = self
         view.backgroundColor = .white
+        self.existingCardsVC.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cardCell")
     }
     
 
-    /*
-    // MARK: - Navigation
+    
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+}
+
+extension ExistingCardsViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        20
     }
-    */
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cardCell", for: indexPath)
+        cell.backgroundColor = .white
+        return cell
+    }
+}
 
+extension ExistingCardsViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let maxSize: CGSize = UIScreen.main.bounds.size
+        let itemWidth: CGFloat = maxSize.width * 0.90
+        let itemHeight: CGFloat = maxSize.height * 0.40 // 30%
+        return CGSize(width: itemWidth, height: itemHeight)
+    }
 }
