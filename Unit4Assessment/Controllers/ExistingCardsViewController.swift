@@ -14,13 +14,20 @@ class ExistingCardsViewController: UIViewController {
     
     
     // TODO: Persist this array
-    public var dataPersistence: DataPersistence<Card>!
+    public var dataPersistence: DataPersistence<Card>! {
+        didSet {
+            DispatchQueue.main.async {
+                self.existingCardsView.collectionView.reloadData()
+        }
+        }
+    }
     
     
     let existingCardsView = ExistingCardsView()
     
     public var cards = [Card]() {
         didSet {
+            existingCardsView.collectionView.reloadData()
 //            existingCardsView.collectionView.reloadData()
 //            if cards.isEmpty {
 //
@@ -36,7 +43,9 @@ class ExistingCardsViewController: UIViewController {
 //       didSet {
 //        existingCardsView.collectionView.reloadData()
 //
-
+    override func viewWillAppear(_ animated: Bool) {
+        fetchSavedCards()
+    }
 
 override func loadView() {
     view = existingCardsView
@@ -47,14 +56,14 @@ override func viewDidLoad() {
     self.existingCardsView.collectionView.dataSource = self
     view.backgroundColor = .white
     self.existingCardsView.collectionView.register(CardCell.self, forCellWithReuseIdentifier: "cardCell")
-    fetchSavedCards()
+    
     
 //    existingCardsView.collectionView.backgroundView = EmptyView(title: "Uh oh!", message: "No cards yet! Click create to get started.")
     
     print("\(cards.count)")
 }
     
-        private func fetchSavedCards() {
+        public func fetchSavedCards() {
             do {
                 cards = try dataPersistence.loadItems()
             } catch {
@@ -79,6 +88,7 @@ extension ExistingCardsViewController: UICollectionViewDataSource {
         }
         
         cell.backgroundColor = .white
+        cell.delegate = self
         let card = cards[indexPath.row]
         cell.card = card
         cell.configureCell(with: card)
@@ -98,7 +108,8 @@ extension ExistingCardsViewController: UICollectionViewDelegateFlowLayout {
 
 extension ExistingCardsViewController: DataPersistenceDelegate {
     func didSaveItem<T>(_ persistenceHelper: DataPersistence<T>, item: T) where T : Decodable, T : Encodable, T : Equatable {
-        print("new item")
+                existingCardsView.collectionView.reloadData()
+
     }
     
     func didDeleteItem<T>(_ persistenceHelper: DataPersistence<T>, item: T) where T : Decodable, T : Encodable, T : Equatable {
@@ -107,3 +118,40 @@ extension ExistingCardsViewController: DataPersistenceDelegate {
     
     // when a card is created something happens here
 }
+
+extension ExistingCardsViewController: CardCellDelegate {
+    func didSelectDeleteButton(_ savedCardCell: CardCell, card: Card) {
+        print("what")
+        
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { alertAction in
+            self.deleteArticle(card)
+        }
+            //TODO: writea delete helper function
+            // cancel action
+            // delete action
+            // post MVP shareAction
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(deleteAction)
+        present(alertController, animated: true)
+        
+        existingCardsView.collectionView.reloadData()
+
+}
+    
+     private func deleteArticle(_ card: Card) {
+            guard let index = cards.firstIndex(of: card) else {
+                return
+            }
+            do {
+                try dataPersistence.deleteItem(at: index)
+                fetchSavedCards()
+                let createCardVC = CreateCardViewController()
+                createCardVC.dataPersistence = dataPersistence
+            } catch {
+                view = EmptyView(title: "NO", message: "NO")
+            }
+        }
+    }

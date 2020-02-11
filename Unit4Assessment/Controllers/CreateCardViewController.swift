@@ -34,6 +34,7 @@ class CreateCardViewController: UIViewController {
         super.viewDidLoad()
         self.createCardView.factOneTextView.delegate = self
         self.createCardView.factTwoTextView.delegate = self
+        self.createCardView.titleTextField.delegate = self
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Create", style: .plain, target: self, action: #selector(pressedCreate(_:)))
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(pressedCancel(_:)))
         
@@ -67,20 +68,24 @@ class CreateCardViewController: UIViewController {
         let createdCard = Card(cardTitle: cardTitle, facts: ("\(factOne), \(factTwo)"))
         let existingCardsVC = ExistingCardsViewController()
         card = createdCard
+       
         
         do {
         try dataPersistence.createItem(card!)
-            // save to documents directory
+    
+             existingCardsVC.dataPersistence = dataPersistence
             print("Article saved")
         } catch {
             print("error saving article \(error)")
         }
         existingCardsVC.cards.append(createdCard)
+        
         showAlert(title: "Success!", message: "\(createdCard.cardTitle) has been created.") { action in
             print("something happened, There are \(existingCardsVC.cards.count) cards")
             
             self.dismiss(animated: true) {
                 self.tabBarController?.selectedIndex = 0
+            
                 
                 
             }
@@ -106,10 +111,20 @@ extension CreateCardViewController: UITextViewDelegate {
         textView.textColor = .black
     }
     
-    func textViewDidEndEditing(_ textView: UITextView) {
-        textView.isEditable = false
-        resignFirstResponder()
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
     }
 }
 
+
+extension CreateCardViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}
 

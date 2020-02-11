@@ -9,19 +9,22 @@
 import UIKit
 
 protocol CardCellDelegate: AnyObject {
-func didSelectCell(_ savedCardCell: CardCell, card: Card)
+func didSelectDeleteButton(_ savedCardCell: CardCell, card: Card)
 }
 
 class CardCell: UICollectionViewCell {
     
     public var card: Card?
+    
     private var isShowingQuestion = true
+    
     weak var delegate: CardCellDelegate?
     
     public lazy var titleLabel: UILabel = {
       let label = UILabel()
         label.text = card?.cardTitle
         label.numberOfLines = 3
+        label.font = UIFont.preferredFont(forTextStyle: .headline)
         return label
     }()
     public lazy var factLabel: UILabel = {
@@ -38,6 +41,14 @@ class CardCell: UICollectionViewCell {
           gesture.addTarget(self, action: #selector(didPress(_:)))
           return gesture
       }()
+    
+    public lazy var moreButton: UIButton = {
+          let button = UIButton()
+          button.setImage(UIImage(systemName: "minus.circle"), for: .normal)
+          button.addTarget(self, action: #selector(deleteButtonPressed(_:)), for: .touchUpInside)
+        button.alpha = 1.0
+          return button
+      }()
     override init(frame: CGRect) {
         super.init(frame: UIScreen.main.bounds)
         commonInit()
@@ -51,7 +62,20 @@ class CardCell: UICollectionViewCell {
         
         setupTitleLabel()
         addGestureRecognizer(tapGesture)
+       
         setupFirstFactLabelConstraint()
+        setupMoreButtonConstraints()
+    }
+    
+    private func setupMoreButtonConstraints() {
+        addSubview(moreButton)
+        moreButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            moreButton.topAnchor.constraint(equalTo: topAnchor),
+            moreButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+            moreButton.heightAnchor.constraint(equalToConstant: 44),
+            moreButton.widthAnchor.constraint(equalTo: moreButton.heightAnchor)
+        ])
     }
     
     private func setupTitleLabel() {
@@ -86,7 +110,6 @@ class CardCell: UICollectionViewCell {
     @objc private func didPress(_ gesture: UITapGestureRecognizer) {
 //        guard let card = card else { return }
         if gesture.state == .began || gesture.state == .changed {
-            print("long pressed")
             return
         }
         isShowingQuestion.toggle()
@@ -95,21 +118,29 @@ class CardCell: UICollectionViewCell {
     }
     
     private func animate() {
-        let duration = 1.0
+        let duration = 0.75
         if isShowingQuestion {
             UIView.transition(with: self, duration: duration, options: [.transitionFlipFromRight], animations: {
                 self.titleLabel.alpha = 1.0
+                self.moreButton.alpha = 1.0
                 self.factLabel.alpha = 0.0
             }, completion: nil)
         } else {
-            UIView.transition(with: self, duration: duration, options: [.transitionFlipFromRight], animations: {
+            UIView.transition(with: self, duration: duration, options: [.transitionFlipFromLeft], animations: {
                 self.titleLabel.alpha = 0.0
+                self.moreButton.alpha = 0.0
                 self.factLabel.alpha = 1.0
                        }, completion: nil)
         }
     }
     
+      
     
+    @objc private func deleteButtonPressed(_ sender: UIButton) {
+         print("Button was pressed for delete card")
+         delegate?.didSelectDeleteButton(self, card: card!)
+     }
+     
     
     
 }
