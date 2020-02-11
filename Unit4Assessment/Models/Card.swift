@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Card: Codable {
+struct Card: Codable & Equatable {
     let cardTitle: String
     let facts: String
 }

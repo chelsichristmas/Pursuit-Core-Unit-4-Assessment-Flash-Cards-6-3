@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DataPersistence
 
 class CreateCardViewController: UIViewController {
     
@@ -14,9 +15,18 @@ class CreateCardViewController: UIViewController {
     
     public var card: Card?
     
+    public var dataPersistence: DataPersistence<Card>!
 
+    var questionWasCreated = false
+    
+    
     override func loadView() {
         view = createCardView
+            
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        resetTextViewsAndFields()
     }
     
     
@@ -32,7 +42,17 @@ class CreateCardViewController: UIViewController {
     }
     
     
+    func resetTextViewsAndFields() {
+        createCardView.factOneTextView.isEditable = true
+        createCardView.factTwoTextView.isEditable = true
+        createCardView.factOneTextView.text = ""
+        createCardView.factTwoTextView.text = ""
+        createCardView.titleTextField.text = ""
+        
+    }
+    
     @objc private func pressedCreate(_ gesture: UITapGestureRecognizer) {
+        
         guard let cardTitle = createCardView.titleTextField.text,
         !cardTitle.isEmpty,
         let factOne = createCardView.factOneTextView.text,
@@ -45,36 +65,38 @@ class CreateCardViewController: UIViewController {
         }
         
         let createdCard = Card(cardTitle: cardTitle, facts: ("\(factOne), \(factTwo)"))
-        let existingCardsView = ExistingCardsViewController()
-        existingCardsView.cards.append(createdCard)
-        showAlert(title: "Success!", message: "\(createdCard.cardTitle) has been created.")
-        
-        
-
+        let existingCardsVC = ExistingCardsViewController()
+        existingCardsVC.cards.append(createdCard)
+        showAlert(title: "Success!", message: "\(createdCard.cardTitle) has been created.") { action in
+          print("something happened")
+            self.dismiss(animated: true) {
+                self.tabBarController?.selectedIndex = 0
+            }
+            
+        }
         return
-
-    
-    
-    
-    
 
 }
     
     @objc private func pressedCancel(_ gesture: UITapGestureRecognizer) {
         //        guard let card = card else { return }
             }
-    //TODO: Implement post function somewhere?
+
     
 }
 
+// TODO: Move constraints upward when user is typing in second text view anmd back down when they press return (may need to replace with text field)
+
 extension CreateCardViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
+        
         textView.text = ""
         textView.textColor = .black
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        
+        textView.isEditable = false
+        resignFirstResponder()
     }
 }
 

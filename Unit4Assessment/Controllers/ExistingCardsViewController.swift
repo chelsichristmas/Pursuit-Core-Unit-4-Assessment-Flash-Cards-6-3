@@ -7,11 +7,26 @@
 //
 
 import UIKit
+import DataPersistence
 
 class ExistingCardsViewController: UIViewController {
     
-    public var cards = [Card]()
+    
+
     // TODO: Persist this array
+    public var dataPersistence: DataPersistence<Card>!
+    
+    public var cards = [Card]() {
+    didSet {
+        existingCardsView.collectionView.reloadData()
+        if cards.isEmpty {
+                // setup empty view on the collection view background
+                existingCardsView.collectionView.backgroundView = EmptyView(title: "Saved Articles", message: "There are currently no saved articles")
+            } else {
+                existingCardsView.collectionView.backgroundView = nil;
+            }
+        }
+    }
     
    let existingCardsView = ExistingCardsView()
 
@@ -33,7 +48,7 @@ class ExistingCardsViewController: UIViewController {
 
 extension ExistingCardsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        20
+        cards.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cardCell", for: indexPath)
@@ -50,3 +65,7 @@ extension ExistingCardsViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: itemWidth, height: itemHeight)
     }
 }
+
+//extension ExistingCardsViewController: DataPersistenceDelegate {
+//
+//}
