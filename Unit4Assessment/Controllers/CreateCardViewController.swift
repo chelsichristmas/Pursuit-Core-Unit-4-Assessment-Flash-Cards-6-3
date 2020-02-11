@@ -9,7 +9,12 @@
 import UIKit
 
 class CreateCardViewController: UIViewController {
+    
+    let createCardView = CreateCardView()
 
+    override func loadView() {
+        view = createCardView
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -17,14 +22,6 @@ class CreateCardViewController: UIViewController {
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
 
 }

@@ -12,17 +12,17 @@ class ExistingCardsViewController: UIViewController {
     
     var cards = [String]()
     
-   let existingCardsVC = ExistingCardsView()
+   let existingCardsView = ExistingCardsView()
 
     override func loadView() {
-        view = existingCardsVC
+        view = existingCardsView
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.existingCardsVC.collectionView.delegate = self
-        self.existingCardsVC.collectionView.dataSource = self
+        self.existingCardsView.collectionView.delegate = self
+        self.existingCardsView.collectionView.dataSource = self
         view.backgroundColor = .white
-        self.existingCardsVC.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cardCell")
+        self.existingCardsView.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cardCell")
     }
     
 

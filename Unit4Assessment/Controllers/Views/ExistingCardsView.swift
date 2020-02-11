@@ -28,11 +28,11 @@ class ExistingCardsView: UIView {
         commonInit()
     }
     private func commonInit(){
-        setupCollectionView()
+        setupCollectionViewConstraints()
     }
     
     
-    private func setupCollectionView() {
+    private func setupCollectionViewConstraints() {
         addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

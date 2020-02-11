@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,8 @@
 		6B2A8DE123F2FB5C00E173B1 /* CreateCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2A8DE023F2FB5C00E173B1 /* CreateCardViewController.swift */; };
 		6B2A8DE323F2FB6A00E173B1 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2A8DE223F2FB6A00E173B1 /* SearchViewController.swift */; };
 		6BB65BEC23F300CE0065FCBB /* ExistingCardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB65BEB23F300CE0065FCBB /* ExistingCardsView.swift */; };
+		6BB65BEF23F307FC0065FCBB /* CreateCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB65BEE23F307FC0065FCBB /* CreateCardView.swift */; };
+		6BB65C1223F311E90065FCBB /* ImageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6BB65C1123F311E90065FCBB /* ImageKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +46,7 @@
 		6B2A8DE023F2FB5C00E173B1 /* CreateCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCardViewController.swift; sourceTree = "<group>"; };
 		6B2A8DE223F2FB6A00E173B1 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		6BB65BEB23F300CE0065FCBB /* ExistingCardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExistingCardsView.swift; sourceTree = "<group>"; };
+		6BB65BEE23F307FC0065FCBB /* CreateCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BB65C1223F311E90065FCBB /* ImageKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				6BB65BEB23F300CE0065FCBB /* ExistingCardsView.swift */,
+				6BB65BEE23F307FC0065FCBB /* CreateCardView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -140,6 +145,9 @@
 			dependencies = (
 			);
 			name = Unit4Assessment;
+			packageProductDependencies = (
+				6BB65C1123F311E90065FCBB /* ImageKit */,
+			);
 			productName = Unit4Assessment;
 			productReference = 5790239423F2EE39000AA216 /* Unit4Assessment.app */;
 			productType = "com.apple.product-type.application";
@@ -190,6 +198,9 @@
 				Base,
 			);
 			mainGroup = 5790238B23F2EE39000AA216;
+			packageReferences = (
+				6BB65C1023F311E90065FCBB /* XCRemoteSwiftPackageReference "ImageKit" */,
+			);
 			productRefGroup = 5790239523F2EE39000AA216 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -224,6 +235,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BB65BEF23F307FC0065FCBB /* CreateCardView.swift in Sources */,
 				6B2A8DE323F2FB6A00E173B1 /* SearchViewController.swift in Sources */,
 				6BB65BEC23F300CE0065FCBB /* ExistingCardsView.swift in Sources */,
 				6B2A8DDD23F2FA9400E173B1 /* FlashCardsTabBarController.swift in Sources */,
@@ -491,6 +503,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6BB65C1023F311E90065FCBB /* XCRemoteSwiftPackageReference "ImageKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/alexpaul/ImageKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6BB65C1123F311E90065FCBB /* ImageKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6BB65C1023F311E90065FCBB /* XCRemoteSwiftPackageReference "ImageKit" */;
+			productName = ImageKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5790238C23F2EE39000AA216 /* Project object */;
 }
