@@ -18,6 +18,7 @@ class FlashCardsTabBarController: UITabBarController {
     
     private lazy var createCardVC: CreateCardViewController = {
         let viewController = CreateCardViewController()
+        
         viewController.tabBarItem = UITabBarItem(title: "Create", image: UIImage(systemName: "plus"), tag: 1)
         return viewController
     }()
@@ -25,6 +26,7 @@ class FlashCardsTabBarController: UITabBarController {
     private lazy var searchVC: SearchViewController = {
         let viewController = SearchViewController()
         viewController.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 2)
+       
         return viewController
     }()
 

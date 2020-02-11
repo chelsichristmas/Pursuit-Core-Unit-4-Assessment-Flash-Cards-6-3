@@ -10,7 +10,8 @@ import UIKit
 
 class ExistingCardsViewController: UIViewController {
     
-    var cards = [String]()
+    public var cards = [Card]()
+    // TODO: Persist this array
     
    let existingCardsView = ExistingCardsView()
 
