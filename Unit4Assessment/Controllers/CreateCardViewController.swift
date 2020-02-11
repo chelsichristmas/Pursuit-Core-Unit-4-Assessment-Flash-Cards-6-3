@@ -96,7 +96,7 @@ class CreateCardViewController: UIViewController {
 }
     
     @objc private func pressedCancel(_ gesture: UITapGestureRecognizer) {
-        //        guard let card = card else { return }
+       self.tabBarController?.selectedIndex = 0
             }
 
     

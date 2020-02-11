@@ -16,9 +16,8 @@ class ExistingCardsViewController: UIViewController {
     // TODO: Persist this array
     public var dataPersistence: DataPersistence<Card>! {
         didSet {
-            DispatchQueue.main.async {
-                self.existingCardsView.collectionView.reloadData()
-        }
+           
+             self.existingCardsView.collectionView.reloadData()
         }
     }
     
@@ -27,14 +26,16 @@ class ExistingCardsViewController: UIViewController {
     
     public var cards = [Card]() {
         didSet {
-            existingCardsView.collectionView.reloadData()
-//            existingCardsView.collectionView.reloadData()
-//            if cards.isEmpty {
-//
-//                existingCardsView.collectionView.backgroundView = EmptyView(title: "Uh oh!", message: "No cards yet! Click create to get started.")
-//            } else {
-//                existingCardsView.collectionView.backgroundView = existingCardsView
-//            }
+             existingCardsView.collectionView.reloadData()
+            if cards.isEmpty {
+
+                existingCardsView.collectionView.backgroundView = EmptyView(title: "Uh oh!", message: "No cards yet! Click create to get started.")
+            } else {
+                 
+               
+                existingCardsView.collectionView.backgroundView = nil
+                
+            }
         }
     }
 
@@ -44,11 +45,13 @@ class ExistingCardsViewController: UIViewController {
 //        existingCardsView.collectionView.reloadData()
 //
     override func viewWillAppear(_ animated: Bool) {
-        fetchSavedCards()
+        
+            fetchSavedCards()
     }
 
 override func loadView() {
     view = existingCardsView
+    
 }
 override func viewDidLoad() {
     super.viewDidLoad()
@@ -128,10 +131,7 @@ extension ExistingCardsViewController: CardCellDelegate {
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { alertAction in
             self.deleteArticle(card)
         }
-            //TODO: writea delete helper function
-            // cancel action
-            // delete action
-            // post MVP shareAction
+        
         
         alertController.addAction(cancelAction)
         alertController.addAction(deleteAction)
