@@ -66,11 +66,23 @@ class CreateCardViewController: UIViewController {
         
         let createdCard = Card(cardTitle: cardTitle, facts: ("\(factOne), \(factTwo)"))
         let existingCardsVC = ExistingCardsViewController()
+        card = createdCard
+        
+        do {
+        try dataPersistence.createItem(card!)
+            // save to documents directory
+            print("Article saved")
+        } catch {
+            print("error saving article \(error)")
+        }
         existingCardsVC.cards.append(createdCard)
         showAlert(title: "Success!", message: "\(createdCard.cardTitle) has been created.") { action in
-          print("something happened")
+            print("something happened, There are \(existingCardsVC.cards.count) cards")
+            
             self.dismiss(animated: true) {
                 self.tabBarController?.selectedIndex = 0
+                
+                
             }
             
         }
