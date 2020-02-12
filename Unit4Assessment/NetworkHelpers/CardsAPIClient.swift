@@ -13,41 +13,27 @@ struct CardsAPIClient {
   
 
   
-    static func postCard(card: Card, completion: @escaping (Result<Bool,AppError>) -> ()) {
-    
-    let endpointURLString = "https://5daf8b36f2946f001481d81c.mockapi.io/api/v2/cards"
-    
-    
-    guard let url = URL(string: endpointURLString) else {
-      completion(.failure(.badURL(endpointURLString)))
-      return
-    }
-    
-    do {
-      let data = try JSONEncoder().encode(card)
-      
-      var request = URLRequest(url: url)
-      
-      request.httpMethod = "POST"
-      
-      request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-      
-      request.httpBody = data
-      
+   static func fetchTopStories(completion: @escaping ( Result<[Card], AppError>) -> ()) {
+      let endpointURLString = "https://5daf8b36f2946f001481d81c.mockapi.io/api/v2/cards"
+      guard let url = URL(string: endpointURLString) else {
+        completion(.failure(.badURL(endpointURLString)))
+        return
+      }
+      let request = URLRequest(url: url)
       NetworkHelper.shared.performDataTask(with: request) { (result) in
         switch result {
         case .failure(let appError):
           completion(.failure(.networkClientError(appError)))
-        case .success:
-          completion(.success(true))
+        case .success(let data):
+          do {
+            let cardStruct = try JSONDecoder().decode(CardStruct.self, from: data)
+            completion(.success(cardStruct.cards))
+          } catch {
+            completion(.failure(.decodingError(error)))
+          }
         }
       }
-      
-    } catch {
-      completion(.failure(.encodingError(error)))
     }
-    
-  }
 
 }
 

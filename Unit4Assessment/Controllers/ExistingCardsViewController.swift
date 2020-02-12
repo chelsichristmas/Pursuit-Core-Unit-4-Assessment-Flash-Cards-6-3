@@ -5,6 +5,8 @@
 //  Created by Chelsi Christmas on 2/11/20.
 //  Copyright © 2020 Alex Paul. All rights reserved.
 //
+//
+
 
 import UIKit
 import DataPersistence
@@ -13,16 +15,12 @@ class ExistingCardsViewController: UIViewController {
     
     
     
-    // TODO: Persist this array
-    public var dataPersistence: DataPersistence<Card>! {
-        didSet {
-           
-             self.existingCardsView.collectionView.reloadData()
-        }
-    }
+    
+    public var dataPersistence: DataPersistence<Card>!
     
     
     let existingCardsView = ExistingCardsView()
+    let createCardVC = CreateCardViewController()
     
     public var cards = [Card]() {
         didSet {
@@ -30,23 +28,21 @@ class ExistingCardsViewController: UIViewController {
             if cards.isEmpty {
 
                 existingCardsView.collectionView.backgroundView = EmptyView(title: "Uh oh!", message: "No cards yet! Click create to get started.")
+                
             } else {
                  
-               
                 existingCardsView.collectionView.backgroundView = nil
+                createCardVC.resetTextViewsAndFields()
                 
             }
         }
     }
 
 
-//    {
-//       didSet {
-//        existingCardsView.collectionView.reloadData()
-//
     override func viewWillAppear(_ animated: Bool) {
         
             fetchSavedCards()
+    
     }
 
 override func loadView() {
@@ -58,12 +54,9 @@ override func viewDidLoad() {
     self.existingCardsView.collectionView.delegate = self
     self.existingCardsView.collectionView.dataSource = self
     view.backgroundColor = .white
-    self.existingCardsView.collectionView.register(CardCell.self, forCellWithReuseIdentifier: "cardCell")
+    self.existingCardsView.collectionView.register(MainViewCardCell.self, forCellWithReuseIdentifier: "cardCell")
     
     
-//    existingCardsView.collectionView.backgroundView = EmptyView(title: "Uh oh!", message: "No cards yet! Click create to get started.")
-    
-    print("\(cards.count)")
 }
     
         public func fetchSavedCards() {
@@ -86,7 +79,7 @@ extension ExistingCardsViewController: UICollectionViewDataSource {
         cards.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cardCell", for: indexPath) as? CardCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cardCell", for: indexPath) as? MainViewCardCell else {
             fatalError("Unable to dequeue Card Cell")
         }
         
@@ -119,11 +112,11 @@ extension ExistingCardsViewController: DataPersistenceDelegate {
         
     }
     
-    // when a card is created something happens here
+    
 }
 
 extension ExistingCardsViewController: CardCellDelegate {
-    func didSelectDeleteButton(_ savedCardCell: CardCell, card: Card) {
+    func didSelectDeleteButton(_ savedCardCell: MainViewCardCell, card: Card) {
         print("what")
         
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)

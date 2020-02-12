@@ -16,18 +16,20 @@ class CreateCardViewController: UIViewController {
     public var card: Card?
     
     public var dataPersistence: DataPersistence<Card>!
+    
+    private var placeholderText = "Enter a fact about this question"
 
     var questionWasCreated = false
     
     
     override func loadView() {
         view = createCardView
-            
+         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         resetTextViewsAndFields()
-    }
+            }
     
     
     override func viewDidLoad() {
@@ -39,16 +41,20 @@ class CreateCardViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(pressedCancel(_:)))
         
 
-        view.backgroundColor = .systemPink
+        view.backgroundColor = .systemGroupedBackground
     }
     
     
-    func resetTextViewsAndFields() {
+    public func resetTextViewsAndFields() {
         createCardView.factOneTextView.isEditable = true
         createCardView.factTwoTextView.isEditable = true
-        createCardView.factOneTextView.text = ""
-        createCardView.factTwoTextView.text = ""
-        createCardView.titleTextField.text = ""
+        createCardView.factOneTextView.text = placeholderText
+        createCardView.factOneTextView.textColor = .systemGray
+        createCardView.factTwoTextView.text = placeholderText
+        createCardView.factTwoTextView.textColor = .systemGray
+        
+        
+        
         
     }
     
@@ -61,11 +67,11 @@ class CreateCardViewController: UIViewController {
             let factTwo = createCardView.factTwoTextView.text,
             !factTwo.isEmpty else {
                 showAlert(title: "Missing Fields", message: "All fields are required.")
-//                sender.isEnabled = true
+            
                 return
         }
         
-        let createdCard = Card(cardTitle: cardTitle, facts: ("\(factOne), \(factTwo)"))
+        let createdCard = Card(cardTitle: cardTitle, facts: ["\(factOne)", "\(factTwo)"])
         let existingCardsVC = ExistingCardsViewController()
         card = createdCard
        
@@ -78,15 +84,13 @@ class CreateCardViewController: UIViewController {
         } catch {
             print("error saving article \(error)")
         }
-        existingCardsVC.cards.append(createdCard)
+
         
         showAlert(title: "Success!", message: "\(createdCard.cardTitle) has been created.") { action in
             print("something happened, There are \(existingCardsVC.cards.count) cards")
             
             self.dismiss(animated: true) {
                 self.tabBarController?.selectedIndex = 0
-            
-                
                 
             }
             
@@ -102,7 +106,7 @@ class CreateCardViewController: UIViewController {
     
 }
 
-// TODO: Move constraints upward when user is typing in second text view anmd back down when they press return (may need to replace with text field)
+
 
 extension CreateCardViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -112,7 +116,7 @@ extension CreateCardViewController: UITextViewDelegate {
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
+        if text == "\n" || text == placeholderText {
             textView.resignFirstResponder()
             return false
         }

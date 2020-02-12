@@ -7,8 +7,10 @@
 //
 
 import Foundation
-
+struct CardStruct: Codable & Equatable {
+    let cards: [Card]
+}
 struct Card: Codable & Equatable {
     let cardTitle: String
-    let facts: String
+    let facts: [String]
 }

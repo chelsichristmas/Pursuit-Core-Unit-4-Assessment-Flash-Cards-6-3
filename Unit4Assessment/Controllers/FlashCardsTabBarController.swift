@@ -33,7 +33,7 @@ class FlashCardsTabBarController: UITabBarController {
     private lazy var searchVC: SearchViewController = {
         let viewController = SearchViewController()
         viewController.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 2)
-       
+       viewController.dataPersistence = dataPersistence
         return viewController
     }()
 

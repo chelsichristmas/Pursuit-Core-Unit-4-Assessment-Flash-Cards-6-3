@@ -9,10 +9,10 @@
 import UIKit
 
 protocol CardCellDelegate: AnyObject {
-func didSelectDeleteButton(_ savedCardCell: CardCell, card: Card)
+func didSelectDeleteButton(_ savedCardCell: MainViewCardCell, card: Card)
 }
 
-class CardCell: UICollectionViewCell {
+class MainViewCardCell: UICollectionViewCell {
     
     public var card: Card?
     
@@ -42,7 +42,7 @@ class CardCell: UICollectionViewCell {
           return gesture
       }()
     
-    public lazy var moreButton: UIButton = {
+    public lazy var deleteButton: UIButton = {
           let button = UIButton()
           button.setImage(UIImage(systemName: "minus.circle"), for: .normal)
           button.addTarget(self, action: #selector(deleteButtonPressed(_:)), for: .touchUpInside)
@@ -68,13 +68,13 @@ class CardCell: UICollectionViewCell {
     }
     
     private func setupMoreButtonConstraints() {
-        addSubview(moreButton)
-        moreButton.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(deleteButton)
+        deleteButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            moreButton.topAnchor.constraint(equalTo: topAnchor),
-            moreButton.trailingAnchor.constraint(equalTo: trailingAnchor),
-            moreButton.heightAnchor.constraint(equalToConstant: 44),
-            moreButton.widthAnchor.constraint(equalTo: moreButton.heightAnchor)
+            deleteButton.topAnchor.constraint(equalTo: topAnchor),
+            deleteButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+            deleteButton.heightAnchor.constraint(equalToConstant: 44),
+            deleteButton.widthAnchor.constraint(equalTo: deleteButton.heightAnchor)
         ])
     }
     
@@ -82,6 +82,8 @@ class CardCell: UICollectionViewCell {
         addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
@@ -91,8 +93,8 @@ class CardCell: UICollectionViewCell {
         addSubview(factLabel)
         factLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-//        factLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 10),
-//        factLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -10),
+        factLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 10),
+        factLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -10),
         factLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
         factLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
 
@@ -104,11 +106,11 @@ class CardCell: UICollectionViewCell {
     
     public func configureCell(with: Card) {
         titleLabel.text = card?.cardTitle
-        factLabel.text = card?.facts
+        factLabel.text = card?.facts.first
     }
     
     @objc private func didPress(_ gesture: UITapGestureRecognizer) {
-//        guard let card = card else { return }
+
         if gesture.state == .began || gesture.state == .changed {
             return
         }
@@ -117,18 +119,18 @@ class CardCell: UICollectionViewCell {
         
     }
     
-    private func animate() {
+    public func animate() {
         let duration = 0.75
         if isShowingQuestion {
             UIView.transition(with: self, duration: duration, options: [.transitionFlipFromRight], animations: {
                 self.titleLabel.alpha = 1.0
-                self.moreButton.alpha = 1.0
+                self.deleteButton.alpha = 1.0
                 self.factLabel.alpha = 0.0
             }, completion: nil)
         } else {
             UIView.transition(with: self, duration: duration, options: [.transitionFlipFromLeft], animations: {
                 self.titleLabel.alpha = 0.0
-                self.moreButton.alpha = 0.0
+                self.deleteButton.alpha = 0.0
                 self.factLabel.alpha = 1.0
                        }, completion: nil)
         }
