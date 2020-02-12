@@ -61,11 +61,11 @@ class CreateCardViewController: UIViewController {
     @objc private func pressedCreate(_ gesture: UITapGestureRecognizer) {
         
         guard let cardTitle = createCardView.titleTextField.text,
-        !cardTitle.isEmpty,
+//        !cardTitle.isEmpty,
         let factOne = createCardView.factOneTextView.text,
-            !factOne.isEmpty,
+            !factOne.isEmpty, factOne != placeholderText,
             let factTwo = createCardView.factTwoTextView.text,
-            !factTwo.isEmpty else {
+            !factTwo.isEmpty, factTwo != placeholderText else {
                 showAlert(title: "Missing Fields", message: "All fields are required.")
             
                 return
